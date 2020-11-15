@@ -1,28 +1,56 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Header />
+    <div class="content">
+      <ListProject />
+    </div>
+
+    <ModalPanel v-model="isSetting">
+      <Setting />
+    </ModalPanel>
+    
+    <ModalPanel v-model="isAnalytics">
+      <Analytics />
+    </ModalPanel>
+
+    <ModalPanel v-model="isProject">
+      <Project />
+    </ModalPanel>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+import ModalPanel from './components/base/ModalPanel.vue';
+import Header from './components/Header.vue';
+
+import Setting from './components/Setting.vue';
+import Analytics from './components/Analytics.vue';
+import Project from './components/Project.vue';
+
+import ListProject from './components/project/ListProject.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    ModalPanel,
+    Header,
+    Setting,
+    Analytics,
+    Project,
+    ListProject,
+  },
+  data() {
+    return {
+      isSetting: false,
+      isAnalytics: false,
+      isProject: false,
+    };
   },
 };
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
