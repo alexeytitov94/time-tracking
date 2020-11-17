@@ -19,6 +19,8 @@ body {
   overflow-y: scroll;
   line-height: 1;
   height: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 img {
@@ -46,4 +48,107 @@ button::-moz-focus-inner {
   border: 0 !important;
 }
 
+input {
+  outline: none;
+}
 
+//button
+.btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  font-weight: 500;
+  padding: 0 20px;
+  transition: all .2s;
+  border-radius: 2px;
+  background: #f8f8f8;
+  text-align: center;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+
+  .icon {
+    font-size: 17px;
+    margin-right: 10px;
+  }
+
+  &.btn-blue {
+    background: var(--main-blue);
+    color: #fff;
+  }
+}
+
+//input
+input {
+  width: 100%;
+  border: 1px solid var(--support-separator-gray);
+  height: 42px;
+  padding: 0 10px;
+  border-radius: 2px;
+}
+
+
+//right-panel-modal
+.wrapper-modal {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+
+    .title {
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .button {
+      font-weight: 500;
+      border: 2px solid var(--main-blue);
+      color: var(--main-blue);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all .2s;
+      height: 42px;
+      padding: 0 15px;
+      display: flex;
+      align-items: center;
+
+      &:hover {
+        color: #fff;
+        background: var(--main-blue);
+      }
+    }
+  }
+}
+
+//select
+.vue-picker {
+  cursor: pointer;
+}
+
+.vue-picker button,
+.vue-picker__opener {
+  border: none !important;
+  outline: none !important;
+  border-color: none !important;
+  box-shadow: none !important;
+}
+
+
+.vue-picker__dropdown {
+  overflow: hidden !important;
+  border: none !important;
+  outline: none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background: #f6f6f6;
+}
+
+.vue-picker__opener {
+  outline: none;
+  height: 30px;
+  padding: 0 10px;
+}

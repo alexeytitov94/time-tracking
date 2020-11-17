@@ -5,7 +5,7 @@
       <ListProject />
     </div>
 
-    <ModalPanel v-model="isSetting">
+    <ModalPanel v-model="isSettingBool">
       <Setting />
     </ModalPanel>
     
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
+
 import ModalPanel from './components/base/ModalPanel.vue';
 import Header from './components/Header.vue';
 
@@ -41,16 +43,39 @@ export default {
   },
   data() {
     return {
-      isSetting: false,
       isAnalytics: false,
       isProject: false,
     };
   },
+  computed: {
+    ...mapState(['isSetting', 'user']),
+    isSettingBool: {
+      get() {
+        return this.isSetting
+      },
+      set() {
+        this.setIsSetting()
+      }
+    }
+  },
+  methods: {
+    ...mapMutations(['setIsSetting', 'setUser']),
+    ...mapActions('projects', ['getProjects'])
+  },
+  mounted() {
+    this.setUser(1)
+    this.getProjects()
+  }
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 #app {
   color: #2c3e50;
+
+  .content {
+    max-width: 900px;
+    margin: 20px auto 30px;
+  }
 }
 </style>

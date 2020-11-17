@@ -53,9 +53,9 @@ export default {
       position: absolute;
       display: flex;
       align-items: center;
-      top: 15px;
+      top: 22px;
       left: -65px;
-      background: #2a1c46;
+      background: #347afb;
       width: 65px;
       padding: 5px 15px;
       border-top-left-radius: 50px;
