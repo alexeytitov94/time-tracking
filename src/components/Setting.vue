@@ -1,8 +1,17 @@
 <template>
   <div class="setting">
     <div class="header">
-      <span class="title">Настройки проектов</span>
-      <span class="button" @click="isCreateProject = !isCreateProject">Создать проект</span>
+      <div>
+        <span class="title">Настройки проектов</span>
+        <p v-if="!isAdmin">
+          Кликните на проект, чтобы добавить его в свои проекты
+        </p>
+      </div>
+      <span
+        class="button"
+        v-if="isAdmin"
+        @click="isCreateProject = !isCreateProject"
+      >Создать проект</span>
     </div>
     <div class="content">
       <div class="list-project" v-if="projects">
@@ -10,10 +19,16 @@
           v-for="(item, index) in projects"
           :key="index"
           class="item"
-          @click="choseProject(item)"
+          :class="{ active : item.active }"
         >
-          <div class="title">
-            {{ item.title }}
+          <div @click="choseProject(item)" class="wrapper">
+            <span class="active" v-if="item.active">Мой проект</span>
+            <div class="title">
+              {{ item.title }}
+            </div>
+          </div>
+          <div class="delete" v-if="isAdmin" @click="deleteProjectItem(item)">
+            <span class="icon-trash"></span>
           </div>
         </div>
       </div>
@@ -26,7 +41,7 @@
         </div>
         <div class="content">
           <input type="text" v-model="newProject.title" placeholder="Название проекта">
-          <input type="number" v-model="newProject.idCompany" placeholder="ID компании">
+          <input type="text" v-model="newProject.linkProject" placeholder="Ссылка на проект">
 
           <button class="btn btn-blue" @click="createNewProject">
             Создать проект
@@ -42,7 +57,17 @@
         </div>
         <div class="content">
           <input type="text" v-model="project.title" placeholder="Название проекта">
-          <input type="number" v-model="project.idCompany" placeholder="ID компании">
+          <input type="text" v-model="project.linkProject" placeholder="Ссылка на проект">
+          <div
+            class="checkbox"
+            :class="{ active : project.active }"
+            @click="project.active = !project.active"
+          >
+            <span
+            class="icon"
+            :class="[project.active ? 'icon-checkbox' : 'icon-checkbox-outline']"></span>
+            <span>Мой проект</span>
+          </div>
 
           <button class="btn btn-blue" @click="editProjectBase">
             Изменить проект
@@ -69,38 +94,53 @@ export default {
       isEditProject: false,
       newProject: {
         title: '',
-        idCompany: '',
+        linkProject: '',
       },
       project: null,
     }
   },
   computed: {
+    ...mapState(['isAdmin']),
     ...mapState('projects', ['projects']),
   },
   methods: {
-    ...mapActions('projects', ['createProject', 'editProject']),
+    ...mapActions('projects', [
+      'createProject',
+      'editProject',
+      'toggleActiveProject',
+      'deleteProject'
+    ]),
     createNewProject() {
-      if (this.newProject.title != '' && this.newProject.idCompany != '') {
+      if (this.newProject.title != '' && this.newProject.linkProject != '') {
         this.createProject(this.newProject)
         this.isCreateProject = false
         this.newProject.title = ''
-        this.newProject.idCompany = ''
+        this.newProject.linkProject = ''
       }
     },
     editProjectBase() {
-      if (this.project.title != '' && this.project.idCompany != '') {
+      if (this.project.title != '' && this.project.linkProject != '') {
         this.editProject(this.project)
         this.isEditProject = false
         this.project = null
       }
     },
     choseProject(project) {
-      this.isEditProject = true
-      this.project = {
-        id: project.idProject,
-        title: project.title,
-        idCompany: project.idCompany,
+      if (this.isAdmin) {
+        this.isEditProject = true
+        this.project = {
+          idProject: project.idProject,
+          title: project.title,
+          linkProject: project.linkProject,
+          active: project.active,
+        }
+      } else {
+        project.active = !project.active
+        this.toggleActiveProject(project)
       }
+    },
+    deleteProjectItem(item) {
+      this.deleteProject(item)
     }
   },
 }
@@ -116,22 +156,65 @@ export default {
   .content {
     .list-project {
       .item {
+        position: relative;
         display: flex;
         align-items: center;
-        padding: 20px;
-        border: 1px solid var(--support-separator-gray);
-        border-radius: 5px;   
+        border-bottom: 2px solid #f5f5f5;
         margin-bottom: 10px;
         cursor: pointer;
         transition: .2s;
 
+        & > .wrapper {
+          height: 100%;
+          width: 100%;
+          padding: 25px 20px;
+
+          .active {
+            display: block;
+            font-size: 11px;
+            background: var(--main-blue);
+            color: #fff;
+            padding: 5px 10px;
+            width: max-content;
+            border-radius: 2px;
+            margin-bottom: 5px;
+          }
+        }
+
+        &.active {
+          & > .wrapper {
+            padding: 15px 20px;
+          }
+        }
+
         &:hover {
-          transform: translateY(-2px);
+          .delete {
+            opacity: 1;
+            transform: translateX(0);
+          }
         }
 
         .title {
+          font-size: 19px;
+          font-weight: 500;
+        }
+
+        .delete {
+          position: absolute;
+          top: 0;
+          right: 20px;
           font-size: 20px;
-          font-weight: 600;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          opacity: 0;
+          transition: .3s;
+          transform: translateX(10px);
+
+          &:hover {
+            color: var(--additional-error);
+            opacity: 0.7;
+          }
         }
       }
     }

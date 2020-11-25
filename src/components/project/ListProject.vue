@@ -15,21 +15,18 @@
     </div>
 
     <div class="body">
-      <div class="item">
+      <div class="item" v-for="(item, index) in listProject" :key="index">
         <div class="block block-1 title">
-          <span> ГТС </span>
+          <span>{{ item.title }}</span>
         </div>
         <div class="block block-2">
-          <Time />
+          <Time :time="item.techsupport" :project="item" field="techsupport" />
         </div>
         <div class="block block-2">
-          <Time />
+          <Time :time="item.project" :project="item" field="project" />
         </div>
         <div class="block block-2">
-          <Time />
-        </div>
-        <div class="block block-3 analytics">
-          <span class="icon-analytics"></span>
+          <Time :time="item.communication" :project="item" field="communication" />
         </div>
       </div>
     </div>
@@ -37,12 +34,27 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Time from './Time.vue';
 
 export default {
   name: 'ListProject',
   components: {
     Time,
+  },
+  computed: {
+    ...mapState('projects', ['type', 'projects', 'projectUsers']),
+    listProject() {
+      if (this.projects) {
+        if (this.type == 'me') { 
+          return this.projects.filter(item => item.active)
+        } else {
+          return this.projects
+        }
+      } else {
+        return null
+      }
+    }
   },
 }
 </script>
@@ -62,32 +74,39 @@ export default {
       align-items: center;
 
       &-1 {
-        width: 30%;
+        width: 34%;
       }
 
       &-2 {
-        width: 20%;
+        width: 22%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
-      &-3 {
-        width: 10%;
-      }
+      // &-3 {
+      //   width: 10%;
+      // }
     }
   }
 
   .header {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+
+    .block {
+      font-size: 14px;
+      color: var(--support-dark-gray);
+      display: flex;
+      justify-content: center;
+    }
   }
 
   .body {
     .item {
-      height: 50px;
       display: flex;
       align-items: center;
-      background: #e9e9e92b;
-      border-radius: 5px;
-      padding: 5px 15px;
-      margin-bottom: 10px;
+      border-bottom: 1px solid #f5f5f5;
+      padding: 10px 0;
     }
 
     .title {

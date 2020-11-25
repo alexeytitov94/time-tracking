@@ -1,74 +1,157 @@
 <template>
-  <div class="time">
-    <div class="field">
-      <input type="text" value="0">
-
-      <vue-picker v-model="time">
-        <vue-picker-option value="1">Час.</vue-picker-option>
-        <vue-picker-option value="2">Мин.</vue-picker-option>
-      </vue-picker>
+  <div class="time-wrapper">
+    <div class="hour">
+      <input type="text" v-model="hour" :disabled="!currentTime">
     </div>
-    <span class="icon icon-stop-circle-outline"></span>
+    <div class="minutes">
+      <input type="text" v-model="minutes" :disabled="!currentTime">
+    </div>
+    <div class="icon" @click="action">
+      <span class="icon icon-stop" v-if="currentTime"></span>
+      <span class="icon icon-play" v-else></span>
+    </div>
   </div>
 </template>
 
 <script>
-import { VuePicker, VuePickerOption } from '@invisiburu/vue-picker'
-import '@invisiburu/vue-picker/dist/vue-picker.min.css'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Time',
-  components: {
-    VuePicker,
-    VuePickerOption,
+  props: {
+    time: {
+      type: [Object, Number],
+    },
+    project: {
+      type: Object,
+    },
+    field: {
+      type: String,
+    }
   },
   data() {
     return {
-      time: '1',
+      currentTime: 0,
+      interval: '',
     }
   },
+  computed: {
+    hour: {
+      get() {
+        return Math.floor(this.currentTime/60)
+      },
+      set(value) {
+        this.currentTime = (value * 60) + Math.floor(this.currentTime%60)
+      }
+    },
+    minutes: {
+      get() {
+        return Math.floor(this.currentTime%60)
+      },
+      set(value) {
+        if (value > 60) {
+          value = 60
+        }
+        this.currentTime = (Math.floor(this.currentTime/60) * 60) + (+value)
+      }
+    }
+  },
+  methods: {
+    ...mapActions('projects', ['changeTime']),
+    async action() {
+      this.load = true
+      await this.changeTime({
+        idProject: this.project.idProject,
+        idUser: this.project.idUser,
+        time:  this.currentTime,
+        idTime: this.time.id,
+        field: this.field,
+        type: this.currentTime ? 'close' : 'open'
+      })
+
+      if (this.currentTime) {
+        clearInterval(this.interval)
+        this.currentTime = 0  
+      } else {
+        this.currentTime = 1;
+        this.interval = setInterval(() => {
+          this.currentTime = this.currentTime + 1
+        }, 60000)
+      }
+      this.load = false
+    }
+  },
+  mounted() {
+    if (this.time.time) {
+      this.currentTime = this.time.time
+    }
+
+    this.interval = setInterval(() => {
+      if (this.currentTime) {
+        this.currentTime = this.currentTime + 1
+      }
+    }, 60000)
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.time {
-  height: 100%;
-  width: 100%;
+.time-wrapper {
   display: flex;
-  align-items: center;
-  padding: 5px 10px;
+  height: 42px;
+  padding: 3px;
+  border: 1px solid #f5f5f5;
+  border-radius: 5px;
+  background: #fff;
 
-  .field {
-    display: flex;
-    background: #fff;
-    border-radius: 5px;
-    width: 100%;
+  & > div {
     height: 100%;
-    margin-right: 10px;
+    width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 
     input {
+      border: none;
       width: 100%;
       height: 100%;
-      border-radius: 5px;
+      background: none;
+      padding: 0;
+      text-align: center;
       font-weight: 600;
-      padding: 0 10px;
-    }
-  }
+      color: var(--support-light-black);
 
-  .icon {
-    cursor: pointer;
-    font-size: 25px;
-    transition: all .2s;
-
-    &.icon-play-circle-outline {
-      &:hover {
-        color: #168409;
+      &:disabled {
+        font-weight: 500;
       }
     }
 
-    &.icon-stop-circle-outline {
+    &.hour {
+      border-right: 1px solid #f5f5f5;
+    }
+
+    &.icon {
+      background: #f6f6f6;
+      border-radius: 3px;
+      height: 34px;
+      width: 34px;
+      cursor: pointer;
+      color: #a5a5a5;
+      font-size: 12px;
+      transition: .2s;
+
+      .icon-play {
+        color: var(--support-light-black);
+      }
+
+      .icon-stop {
+        color: #e99999b0;
+      }
+
       &:hover {
-        color: #ae0505;
+        background: #f0f0f0;
+        color: var(--support-light-black);
       }
     }
   }

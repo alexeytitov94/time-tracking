@@ -8,14 +8,18 @@
     <ModalPanel v-model="isSettingBool">
       <Setting />
     </ModalPanel>
-    
-    <ModalPanel v-model="isAnalytics">
+
+    <ModalPanel v-model="isAnalyticsBool">
       <Analytics />
     </ModalPanel>
 
-    <ModalPanel v-model="isProject">
-      <Project />
+    <ModalPanel v-model="isHistoryBool">
+      <History v-if="isHistoryBool" />
     </ModalPanel>
+
+    <Modal v-model="isNewUserBool" :closeOnOverlay="true">
+      <NewUserModal />
+    </Modal>
   </div>
 </template>
 
@@ -23,11 +27,13 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 import ModalPanel from './components/base/ModalPanel.vue';
+import Modal from './components/base/Modal.vue';
 import Header from './components/Header.vue';
 
 import Setting from './components/Setting.vue';
 import Analytics from './components/Analytics.vue';
-import Project from './components/Project.vue';
+import History from './components/History.vue';
+import NewUserModal from './components/project/NewUserModal.vue';
 
 import ListProject from './components/project/ListProject.vue';
 
@@ -38,17 +44,13 @@ export default {
     Header,
     Setting,
     Analytics,
-    Project,
     ListProject,
-  },
-  data() {
-    return {
-      isAnalytics: false,
-      isProject: false,
-    };
+    History,
+    Modal,
+    NewUserModal
   },
   computed: {
-    ...mapState(['isSetting', 'user']),
+    ...mapState(['isSetting', 'isHistory', 'isAnalytics', 'isNewUser', 'user']),
     isSettingBool: {
       get() {
         return this.isSetting
@@ -56,10 +58,34 @@ export default {
       set() {
         this.setIsSetting()
       }
+    },
+    isHistoryBool: {
+      get() {
+        return this.isHistory
+      },
+      set() {
+        this.setIsHistory()
+      }
+    },
+    isAnalyticsBool: {
+      get() {
+        return this.isAnalytics
+      },
+      set() {
+        this.setIsAnalytics()
+      }
+    },
+    isNewUserBool: {
+      get() {
+        return this.isNewUser
+      },
+      set() {
+        this.setIsNewUser()
+      }
     }
   },
   methods: {
-    ...mapMutations(['setIsSetting', 'setUser']),
+    ...mapMutations(['setIsSetting', 'setIsHistory', 'setIsAnalytics', 'setIsNewUser', 'setUser']),
     ...mapActions('projects', ['getProjects'])
   },
   mounted() {

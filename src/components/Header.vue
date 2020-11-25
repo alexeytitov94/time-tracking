@@ -1,11 +1,14 @@
 <template>
   <div class="header">
     <div class="left">
-      <div class="tab active">Мои проекты</div>
-      <div class="tab">Все проекты</div>
+      <div class="tab" :class="{active : type === 'me'}" @click="setType('me')">Мои проекты</div>
+      <div class="tab" :class="{active : type === 'all'}" @click="setType('all')">Все проекты</div>
     </div>
     <div class="right">
-      <button class="btn">
+      <button class="btn" @click="setIsHistory()">
+        История
+      </button>
+      <button class="btn" v-if="isAdmin" @click="setIsAnalytics()">
         <span class="icon icon-analytics"></span>
         Аналитика
       </button>
@@ -17,12 +20,17 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'Header',
+  computed: {
+    ...mapState(['isAdmin']),
+    ...mapState('projects', ['type'])
+  },
   methods: {
-    ...mapMutations(['setIsSetting'])
+    ...mapMutations(['setIsSetting', 'setIsHistory', 'setIsAnalytics']),
+    ...mapMutations('projects', ['setType'])
   },
 }
 </script>
@@ -67,8 +75,10 @@ export default {
     align-items: center;
 
     .btn {
-      &:first-child {
-        margin-right: 10px;
+      margin-right: 10px;
+
+      &:last-child {
+        margin-right: 0;
       }
 
       &.setting {
