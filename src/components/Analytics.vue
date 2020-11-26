@@ -50,18 +50,18 @@
       <div class="statistic">
         <div class="item techsupport">
           <span class="title">Техподдержка</span>
-          <span>12 часов</span>
+          <span>{{ analytics.statistic.techsupport }}</span>
         </div>
         <div class="item project">
           <span class="title">Проект</span>
-          <span>30 часов</span>
+          <span>{{ analytics.statistic.project }}</span>
         </div>
         <div class="item communication">
           <span class="title">Коммуникация</span>
-          <span>9 часов</span>
+          <span>{{ analytics.statistic.communication }}</span>
         </div>
       </div>
-      <Charts :chartdata="chartData" :options="chartOptions" />
+      <Charts :chartdata="analytics.chartData" :options="chartOptions" />
     </div>
 
     <div class="loader" v-if="isAnalytics">
@@ -129,30 +129,6 @@ export default {
       choseProject: null,
       choseUser: null,
       choseDate: [],
-
-      chartData: {
-        labels: ['21.11', '22.11', '23.11', '24.11', '25.11', '26.11', '27.11'],
-        datasets: [
-          {
-            label: 'Техподдержка',
-            backgroundColor: 'rgb(254 242 216 / .40)',
-            borderColor: '#dc9a10',
-            data: [6, 3, 2, 1, 0, 0, 0]
-          },
-          {
-            label: 'Проект',
-            backgroundColor: 'rgb(222 239 255 / .40)',
-            borderColor: '#27649e',
-            data: [6, 7, 11, 2, 0, 0, 4]
-          },
-          {
-            label: 'Коммуникация',
-            borderColor: '#a93c35',
-            backgroundColor: 'rgb(255 224 222 / .40)',
-            data: [1, 0, 2, 4, 2, 1, 0]
-          }
-        ]
-      },
       chartOptions: {
         responsive: true,
         legend: {
