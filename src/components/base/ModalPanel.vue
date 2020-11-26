@@ -21,6 +21,16 @@ export default {
       default: false,
     },
   },
+  watch: {
+    value() {
+      if (this.value) {
+        document.body.classList.add('open-modal')
+      } else {
+        document.body.classList.remove('open-modal')
+      }
+    },
+  },
+
   methods: {
     close() {
       this.$emit('onClose')

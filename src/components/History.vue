@@ -52,6 +52,7 @@ export default {
   padding: 20px;
   width: 450px;
   height: 100%;
+  overflow: auto;
 
   .list {
     .item {

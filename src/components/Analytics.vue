@@ -50,18 +50,18 @@
       <div class="statistic">
         <div class="item techsupport">
           <span class="title">Техподдержка</span>
-          <span>10 часов</span>
+          <span>12 часов</span>
         </div>
         <div class="item project">
           <span class="title">Проект</span>
-          <span>10 часов</span>
+          <span>30 часов</span>
         </div>
         <div class="item communication">
           <span class="title">Коммуникация</span>
-          <span>10 часов</span>
+          <span>9 часов</span>
         </div>
       </div>
-      <div class="graph"></div>
+      <Charts :chartdata="chartData" :options="chartOptions" />
     </div>
 
     <div class="loader" v-if="isAnalytics">
@@ -109,8 +109,9 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 
 import ModalPanel from './base/ModalPanel.vue'
 import DateRange from './form/DateRange.vue'
-import Button from '@/components/form/Button.vue';
+import Button from '@/components/form/Button.vue'
 import Preloader from '@/components/base/Preloader'
+import Charts from '@/components/project/Charts'
 
 export default {
   name: 'Analytics',
@@ -118,7 +119,8 @@ export default {
     ModalPanel,
     DateRange,
     Button,
-    Preloader
+    Preloader,
+    Charts
   },
   data() {
     return {
@@ -127,6 +129,36 @@ export default {
       choseProject: null,
       choseUser: null,
       choseDate: [],
+
+      chartData: {
+        labels: ['21.11', '22.11', '23.11', '24.11', '25.11', '26.11', '27.11'],
+        datasets: [
+          {
+            label: 'Техподдержка',
+            backgroundColor: 'rgb(254 242 216 / .40)',
+            borderColor: '#dc9a10',
+            data: [6, 3, 2, 1, 0, 0, 0]
+          },
+          {
+            label: 'Проект',
+            backgroundColor: 'rgb(222 239 255 / .40)',
+            borderColor: '#27649e',
+            data: [6, 7, 11, 2, 0, 0, 4]
+          },
+          {
+            label: 'Коммуникация',
+            borderColor: '#a93c35',
+            backgroundColor: 'rgb(255 224 222 / .40)',
+            data: [1, 0, 2, 4, 2, 1, 0]
+          }
+        ]
+      },
+      chartOptions: {
+        responsive: true,
+        legend: {
+          display: false
+        }
+      }
     }
   },
   computed: {

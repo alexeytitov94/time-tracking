@@ -34,16 +34,24 @@ export default {
 <style lang="scss">
 .date-range {
   position: relative;
-  margin-bottom: 20px;  
+  margin-bottom: 20px;
+}
 
-  .mx-datepicker-range {
-    width: 100%;
-  }
+.mx-datepicker-popup {
+  box-shadow: none !important;
+  border-radius: 5px !important;
+  margin-top: 10px !important;
+  border: 2px solid #f5f5f5 !important;
+  transform: translateX(-5px);
+}
 
-  .mx-input {
-    height: 42px;
-    box-shadow: none;
-    border: 2px solid #f5f5f5;
-  }
+.mx-datepicker-range {
+  width: 100%;
+}
+
+.mx-input {
+  height: 50px;
+  box-shadow: none;
+  border: 2px solid #f5f5f5;
 }
 </style>
