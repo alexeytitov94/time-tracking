@@ -1,25 +1,30 @@
 <template>
   <div id="app">
-    <Header />
-    <div class="content">
-      <ListProject />
+    <div v-if="!noAccess">
+      <Header />
+      <div class="content">
+        <ListProject />
+      </div>
+
+      <ModalPanel v-model="isSettingBool">
+        <Setting />
+      </ModalPanel>
+
+      <ModalPanel v-model="isAnalyticsBool">
+        <Analytics />
+      </ModalPanel>
+
+      <ModalPanel v-model="isHistoryBool">
+        <History v-if="isHistoryBool" />
+      </ModalPanel>
+
+      <Modal v-model="isNewUserBool" :closeOnOverlay="true">
+        <NewUserModal />
+      </Modal>
     </div>
-
-    <ModalPanel v-model="isSettingBool">
-      <Setting />
-    </ModalPanel>
-
-    <ModalPanel v-model="isAnalyticsBool">
-      <Analytics />
-    </ModalPanel>
-
-    <ModalPanel v-model="isHistoryBool">
-      <History v-if="isHistoryBool" />
-    </ModalPanel>
-
-    <Modal v-model="isNewUserBool" :closeOnOverlay="true">
-      <NewUserModal />
-    </Modal>
+    <div class="no-access" v-else>
+        <h1>Доступ запрещен</h1>
+    </div>
   </div>
 </template>
 
@@ -48,6 +53,11 @@ export default {
     History,
     Modal,
     NewUserModal
+  },
+  data() {
+    return {
+      noAccess: false,
+    }
   },
   computed: {
     ...mapState(['isSetting', 'isHistory', 'isAnalytics', 'isNewUser', 'user']),
@@ -89,8 +99,12 @@ export default {
     ...mapActions('projects', ['getProjects'])
   },
   mounted() {
-    this.setUser(1)
-    this.getProjects()
+    if (window.userId) {
+      this.setUser(window.userId)
+      this.getProjects()
+    } else {
+      this.noAccess = true
+    }
   }
 };
 </script>
@@ -102,6 +116,20 @@ export default {
   .content {
     max-width: 900px;
     margin: 20px auto 30px;
+  }
+}
+
+.no-access {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  text-align: center;
+
+  h1 {
+    margin-top: 100px;
   }
 }
 </style>

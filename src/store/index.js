@@ -29,7 +29,7 @@ export default new Vuex.Store({
       state.isNewUser = !state.isNewUser
     },
     setUser(state, id) {
-      if (id === 1) {
+      if (id === 1 || id === 116 || id === 340 ) {
         state.isAdmin = true
       }
       state.user = id

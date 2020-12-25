@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Time',
@@ -36,6 +36,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['user']),
     hour: {
       get() {
         return Math.floor(this.currentTime/60)
@@ -62,7 +63,7 @@ export default {
       this.load = true
       await this.changeTime({
         idProject: this.project.idProject,
-        idUser: this.project.idUser,
+        idUser: this.user,
         time:  this.currentTime,
         idTime: this.time.id,
         field: this.field,
