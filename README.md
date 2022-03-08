@@ -1,24 +1,13 @@
-# time-tracking
+Приложение которое учитыват время потраченное на проект + интегрируется с вебхуками, которые постепенно в течении дня заполняют таблицу потраченного времени(звонки, письма, встречи)
 
-## Project setup
-```
-npm install
-```
+Пользователь может нажать на учет времени и он будет идти до тех пор пока пользователь не нажмет завершить.  + пользователь может занести время которое он потратил.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Админстратор может создавать проекты и смореть статистику.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+![image](https://user-images.githubusercontent.com/24390296/157313041-6703c8c1-5f3c-48e1-9713-41ce09739724.png)
 
-### Lints and fixes files
-```
-npm run lint
-```
+![image](https://user-images.githubusercontent.com/24390296/157313325-9d1bef7d-fc19-47ae-87ef-62c1781f7a7e.png)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![image](https://user-images.githubusercontent.com/24390296/157313715-8d2e9153-a093-4ca3-9dd3-9b8ddcf6605f.png)
+
+
